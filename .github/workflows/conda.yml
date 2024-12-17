@@ -9,7 +9,7 @@ on:
 
 jobs:
   conda:
-    name: ${{ matrix.os }})
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -23,6 +23,7 @@ jobs:
         with:
           auto-update-conda: true
           python-version: 3.9
+          channels: defaults
       - name: Conda info
         run: conda info
       - name: Install PyTorch

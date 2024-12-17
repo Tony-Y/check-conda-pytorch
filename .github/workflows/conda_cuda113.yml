@@ -1,0 +1,42 @@
+name: Conda PyTorch
+
+on:
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  conda:
+    name: ${{ matrix.os }} ${{ matrix.pytorch-version }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -el {0}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "windows-latest"]
+        pytorch-version: ["1.8.1", "1.9.0", "1.9.1"]
+        include:
+          - pytorch-version: "1.8.1"
+            command: conda install pytorch==1.8.1 torchvision==0.9.1 torchaudio==0.8.1 cudatoolkit=11.3 -c pytorch -c conda-forge
+          - pytorch-version: "1.9.0"
+            command: conda install pytorch==1.9.0 torchvision==0.10.0 torchaudio==0.9.0 cudatoolkit=11.3 -c pytorch -c conda-forge
+          - pytorch-version: "1.9.1"
+            command: conda install pytorch==1.9.1 torchvision==0.10.1 torchaudio==0.9.1 cudatoolkit=11.3 -c pytorch -c conda-forge
+    steps:
+      - uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-update-conda: true
+          python-version: 3.9
+          channels: defaults
+      - name: Conda info
+        run: conda info
+      - name: Install NumPy
+        run: conda install numpy=1.26.4
+      - name: Install PyTorch
+        run: ${{ matrix.command }}
+      - name: Import PyTorch
+        run: python -c 'import torch; print("PyTorch:", torch.__version__); print("CUDA:", torch.version.cuda)'

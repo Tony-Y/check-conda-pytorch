@@ -39,4 +39,4 @@ jobs:
       - name: Install PyTorch
         run: ${{ matrix.command }}
       - name: Import PyTorch
-        run: python -c 'import torch; print(torch.__version__)'
+        run: python -c 'import torch; print("PyTorch:", torch.__version__); print("CUDA:", torch.version.cuda)'

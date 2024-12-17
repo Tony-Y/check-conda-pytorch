@@ -1,4 +1,4 @@
-name: Conda PyTorch
+name: Conda PyTorch CUDA 11.3
 
 on:
   push:

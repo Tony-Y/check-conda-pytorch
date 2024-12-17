@@ -21,6 +21,8 @@ jobs:
           auto-update-conda: true
           python-version: 3.9
       - name: Install PyTorch
-        run: conda install pytorch==1.9.1 torchvision==0.10.1 torchaudio==0.9.1 cudatoolkit=11.1 -c pytorch -c conda-forge
+        run: |
+          conda install numpy=1.26.4
+          conda install pytorch==1.9.1 torchvision==0.10.1 torchaudio==0.9.1 cudatoolkit=11.1 -c pytorch -c conda-forge
       - name: Import PyTorch
         run: python -c 'import torch; print(torch.__version__)'

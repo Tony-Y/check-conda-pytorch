@@ -11,6 +11,9 @@ jobs:
   conda:
     name: ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash -el {0}
     strategy:
       fail-fast: false
       matrix:
@@ -21,7 +24,6 @@ jobs:
           auto-update-conda: true
           python-version: 3.9
       - name: Conda info
-        shell: bash -el {0}
         run: conda info
       - name: Install PyTorch
         run: |

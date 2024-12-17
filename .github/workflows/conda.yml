@@ -9,7 +9,7 @@ on:
 
 jobs:
   conda:
-    name: ${{ matrix.os }}
+    name: ${{ matrix.os }} ${{ matrix.pytorch-version }}
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -18,6 +18,14 @@ jobs:
       fail-fast: false
       matrix:
         os: ["ubuntu-latest", "windows-latest"]
+        pytorch-version: ["1.8.1", "1.9.0", "1.9.1"]
+        include:
+          - pytorch-version: "1.8.1"
+            command: conda install pytorch==1.8.1 torchvision==0.9.1 torchaudio==0.8.1 cudatoolkit=11.1 -c pytorch -c conda-forge
+          - pytorch-version: "1.9.0"
+            command: conda install pytorch==1.9.0 torchvision==0.10.0 torchaudio==0.9.0 cudatoolkit=11.1 -c pytorch -c conda-forge
+          - pytorch-version: "1.9.1"
+            command: conda install pytorch==1.9.1 torchvision==0.10.1 torchaudio==0.9.1 cudatoolkit=11.1 -c pytorch -c conda-forge
     steps:
       - uses: conda-incubator/setup-miniconda@v3
         with:
@@ -26,9 +34,9 @@ jobs:
           channels: defaults
       - name: Conda info
         run: conda info
+      - name: Install NumPy
+        run: conda install numpy=1.26.4
       - name: Install PyTorch
-        run: |
-          conda install numpy=1.26.4
-          conda install pytorch==1.9.1 torchvision==0.10.1 torchaudio==0.9.1 cudatoolkit=11.1 -c pytorch -c conda-forge
+        run: ${{ matrix.command }}
       - name: Import PyTorch
         run: python -c 'import torch; print(torch.__version__)'
